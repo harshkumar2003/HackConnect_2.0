@@ -3,6 +3,8 @@ import cors from "cors";
 import 'dotenv/config';
 import connectDB from "./config/mongodb.js";
 import userRouter from "./routes/userRoute.js";
+import dashboardRouter from "./routes/dashboardRoute.js";
+import userUpdateRouter from "./routes/userUpdateRoute.js";
 
 //App config
 
@@ -17,6 +19,8 @@ app.use(cors());
 
 //API endpoints
 app.use('/api/user',userRouter)
+app.use('/api/user',dashboardRouter)
+app.use('/api/user',userUpdateRouter)
 app.get('/',(req,res)=>
 {
     res.send("API working");

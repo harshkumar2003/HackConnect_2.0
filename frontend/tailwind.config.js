@@ -12,7 +12,8 @@ export default {
           '2xl': {'min': '1536px'},
         },
         fontFamily:{
-          rubik:['Rubik','sans-serif']
+          rubik:['Rubik','sans-serif'],
+          raleway:['Raleway','sans-serif']
         },
       },
     },

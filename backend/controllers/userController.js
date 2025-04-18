@@ -24,9 +24,18 @@ const userLogin = async (req,res)=>
         }
 
         const isMatch = await bcrypt.compare(password , user.password);
+        const token = createToken(user._id);
         if(isMatch)
         {
-            return res.json({success:true,message:"Login Done"})
+            return res.json({success:true,message:"Login Done"
+                ,token,
+                user:{
+                    id: user._id,
+                    name:user.name,
+                    email:user.email,
+                    username:user.username,
+                }
+            })
         }
         else
         {
@@ -46,10 +55,16 @@ const userRegister = async (req,res)=>
         // check email and username
         const exist_email = await userModel.findOne({email});
         const exist_username = await userModel.findOne({username});
-        if(exist_email && exist_username)
-        {
-            return res.json({success:false,message:"User Already exist"})
+        if (exist_email) {
+            return res.json({ success: false, message: "Email already registered" });
         }
+        if (exist_username) {
+            return res.json({ success: false, message: "Username already taken" });
+        }
+        if (!name || !username || !email || !password) {
+            return res.json({ success: false, message: "All fields are required" });
+        }
+        
 
         // validate email , username and strong password
         if(!validator.isEmail(email))
@@ -79,14 +94,24 @@ const userRegister = async (req,res)=>
         // get the token 
         const token = createToken(user._id)
 
-        res.json({success:true,token})
-
+        res.status(201).json({
+            success: true,
+            message: "Signup Successful",
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                username: user.username,
+                email: user.email
+            }
+        });
+        
 
 
 
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:error.message})
+        res.status(500).json({success:false,message:error.message})
     }
 }
 
